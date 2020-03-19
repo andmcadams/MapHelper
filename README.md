@@ -1,8 +1,10 @@
 # Installation
 
+This is a GIMP plugin. You will need GIMP in order to use it.
+
 https://docs.gimp.org/en/gimp-scripting.html#gimp-plugins-install
 
-You may need to chmod +x the setupMap.py file in order for it to show up in gimp.
+You may need to chmod +x the setupMap.py file in order for it to show up in GIMP.
 
 On Linux, I simply ran
 `$ cp setupMap.py ~/.config/GIMP/2.10/plug-ins/`
@@ -20,6 +22,6 @@ In order to make the clipping mask, draw in the "Landmass" layer. Once you have 
 
 # Future Improvements
 
-* Add a plug-in to pixelate an almost finished map
+* Add a plug-in to pixelate an almost finished map (already done by mosaic filter but may want a custom one)
 * Actually put something in install.sh. Need feedback on where to put it in different operating systems.
 * Create a layer with reference objects, icons, and colors?
