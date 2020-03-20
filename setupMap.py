@@ -43,10 +43,6 @@ def python_make_map(width, height, squareSize, background):
 	l.visible = False
 	img.insert_layer(l, lg, 0)
 
-	l = pdb.gimp_layer_new(img, width, height, 1, "Terrain Pixelated", OPAQUE, 0)
-	l.visible = False
-	img.insert_layer(l, lg, 0)
-
 	l = pdb.gimp_layer_new(img, width, height, 1, "Block Coloring", OPAQUE, 0)
 	l.visible = False
 	img.insert_layer(l, lg, 0)
