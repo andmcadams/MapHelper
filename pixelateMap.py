@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from gimpfu import *
+import struct
 
 def python_pixelate_map(img, layer, squareSize):
 	# get the correct image
@@ -30,42 +31,73 @@ def python_pixelate_map(img, layer, squareSize):
 	img.insert_layer(pixelLayer, terrainLayerGroup, 1)
 
 	# Go through each 3x3 block or 4x4 block
-	def getBlockAverage(x, y, squareSize, layer):
-		colors = []
-		for i in range(0,squareSize):
-			for j in range(0, squareSize):
-				if x+j < layer.width and y+i < layer.height:
-					c = layer.get_pixel(x+j, y+i)
-					# If the alpha channel is not 0, push it in to be counted
-					if c[3] != 0:
-						colors.append(c)
+	def setBlockAverage(x, y, squareSize, region, h, w):
+		colors = ''
+		# Get colors of the nxn square
+		endX = False
+		endY = False
+		if x+squareSize < w and y+squareSize < h:
+			colors = region[x:x+squareSize,y:y+squareSize]
+		elif x+squareSize < w:
+			colors = region[x:x+squareSize,y:]
+			endY = True
+		elif y+squareSize < h:
+			colors = region[x:, y:y+squareSize]
+			endX = True
+		else:
+			colors = region[x:,y:]
+			endX = True
+			endY = True
 
-		if len(colors) == 0:
-			return (0, 0, 0, 0)
 
 		avgRed = 0
 		avgBlue = 0
 		avgGreen = 0
-		for color in colors:
-			avgRed += color[0]
-			avgGreen += color[1]
-			avgBlue += color[2]
-		avgRed = int(avgRed/len(colors))
-		avgGreen = int(avgGreen/len(colors))
-		avgBlue = int(avgBlue/len(colors))
+		# colors is of the form "{0xRR0xGG0xBB0xAA}*"
+		colorCount = 0
+		for i in range(0, len(colors), 4):
+			r = colors[i]
+			g = colors[i+1]
+			b = colors[i+2]
+			a = colors[i+3]
+			aVal = struct.unpack("<B", a)[0]
+			if aVal == 0:
+				continue
+			else:
+				avgRed += struct.unpack("<B", r)[0]
+				avgGreen += struct.unpack("<B", g)[0]
+				avgBlue += struct.unpack("<B", b)[0]
+				colorCount += 1
+
+		# This is Python2 so / should do int div if both are ints
+		if colorCount != 0:
+			avgRed /= colorCount
+			avgGreen /= colorCount
+			avgBlue /= colorCount
 
 		# Always set alpha to max
-		return (avgRed, avgGreen, avgBlue, 0xFF)
+		colorString = struct.pack("<B", avgRed) + struct.pack("<B", avgGreen) + struct.pack("<B", avgBlue) + struct.pack("<B", 255)
+		colorString *= len(colors)/len(colorString)
+		
+		if not endX and not endY:
+			region[x:x+squareSize,y:y+squareSize] = colorString
+		elif not endX:
+			region[x:x+squareSize,y:] = colorString
+		elif not endY:
+			region[x:,y:y+squareSize] = colorString
+		else:
+			region[x:,y:] = colorString
 
 
+	# This is an undocumented function I found on some gimpchat forum
+	region = pixelLayer.get_pixel_rgn(0, 0, pixelLayer.width, pixelLayer.height, True)
+	height = pixelLayer.height
+	width = pixelLayer.width
+	for i in range(0, height, squareSize):
+		for j in range(0, width, squareSize):
+			blockColor = setBlockAverage(j, i, squareSize, region, height, width)
 
-	for i in range(0, img.height, squareSize):
-		for j in range(0, img.width, squareSize):
-			blockColor = getBlockAverage(j, i, squareSize, pixelLayer)
-			for w in range(0, squareSize):
-				for z in range(0, squareSize):
-					if j+z < layer.width and i+w < layer.height:
-						pixelLayer.set_pixel(j+z, i+w, blockColor)
+	gimp.displays_flush()
 
 register(
         "python_pixelate_map",
