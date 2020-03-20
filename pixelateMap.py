@@ -28,6 +28,7 @@ def python_pixelate_map(img, layer, squareSize):
 	# Copy the smooth terrain layer
 	pixelLayer = pdb.gimp_layer_copy(terrainLayer, True)
 	pixelLayer.name = "Terrain Pixelated"
+	pixelLayer.visible = False
 	img.insert_layer(pixelLayer, terrainLayerGroup, 1)
 
 	# Go through each 3x3 block or 4x4 block
@@ -96,8 +97,8 @@ def python_pixelate_map(img, layer, squareSize):
 	for i in range(0, height, squareSize):
 		for j in range(0, width, squareSize):
 			blockColor = setBlockAverage(j, i, squareSize, region, height, width)
-
-	gimp.displays_flush()
+	pixelLayer.visible = True
+	pdb.gimp_displays_flush()
 
 register(
         "python_pixelate_map",
