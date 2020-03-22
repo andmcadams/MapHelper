@@ -19,9 +19,8 @@ install_linux_gnu() {
 	dpkg-query -l "gimp-python" > /dev/null
 	if [ ! $? -eq 0 ]
 	then
-		echo "You need to have gimp-python installed. Some distributions do not package gimp-python with GIMP."
+		echo "You need to have gimp-python installed, but it appears to be missing. Some distributions do not package gimp-python with GIMP."
 		echo "You might want to try: sudo apt-get install gimp-python"
-		exit 1
 	fi
 
 	# Copy the files over
