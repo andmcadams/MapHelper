@@ -24,6 +24,8 @@ In order to make the clipping mask, draw in the "Landmass" layer. Once you have 
 
 Whenever you have a blended terrain that you are satisfied with, use the pixelateMap tool found at `Filter > Map > Pixelate map...` and enter in the block size you want to use. You should probably use whatever you selected when you created the map, but there's nothing stopping you from doing otherwise. This will create a new layer (Terrain Pixelated) in the Terrain Group. If you change the layer names generated, this will probably fail.
 
+In order to add labels, use `Filter > Map > Add label...`.
+
 # Future Improvements
 
 * <strike>Add a plug-in to pixelate an almost finished map</strike>
