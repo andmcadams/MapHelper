@@ -102,7 +102,7 @@ register(
         "",
         [
             (PF_STRING, "text", "Label text", None),
-            (PF_RADIO, "squareSize", "Label type", 0, (("Landmark", 0), ("City", 1), ("Kingdom", 2))),
+            (PF_RADIO, "textType", "Label type", 0, (("Landmark", 0), ("City", 1), ("Kingdom", 2))),
         ],
         [],
         python_add_text)
