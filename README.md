@@ -26,5 +26,6 @@ In order to add labels, use `Filter > Map > Add label...`. The labels support a-
 * <strike>Add a plug-in to pixelate an almost finished map</strike>
 * <strike>Actually put something in install.sh. Need feedback on where to put it in different operating systems.</strike>
 	* Add Windows install
-* Create a layer with reference objects, icons, and colors?
+* <strike>Create a layer with reference objects, icons, and colors</strike> Added GentleTractor's sprite page
+	* Might want to condense and add new icons
 * Add x,y to label creation?
