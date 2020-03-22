@@ -4,7 +4,7 @@ This is a GIMP plugin. You will need GIMP in order to use it.
 
 https://docs.gimp.org/en/gimp-scripting.html#gimp-plugins-install
 
-You may need to chmod +x the .py files in order for it to show up in GIMP.
+You may need to chmod +x the .py files in order for it to show up in GIMP. If the plug-in still doesn't show up, it's possible that the GIMP build you installed is missing gimp-python. If you are on Linux, you can get this from your package manager.
 
 If you are using GNU Linux or macOS Catalina, you can probably use the install.sh script. The install script assumes you are using GIMP 2.10 installed in the default location.
 
