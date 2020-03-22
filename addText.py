@@ -32,9 +32,19 @@ def bit_or(arr1, arr2):
 
 def python_add_text(img, layer, text, textType):
 
-	l = pdb.gimp_layer_new(img, img.width, img.height, 1, "Text", 100, 0)
+	textLayerGroup = None
+	for l in img.layers:
+		if l.name == "Text Group":
+			textLayerGroup = l
+			break
+
+	if textLayerGroup == None:
+		#throw some error
+		exit(0)
+
+	l = pdb.gimp_layer_new(img, img.width, img.height, 1, '{} Text Layer'.format(text), 100, 0)
 	l.visible = False
-	img.add_layer(l, 0)
+	img.insert_layer(l, textLayerGroup, 0)
 
 	region = l.get_pixel_rgn(0, 0, l.width, l.height, True)
 	totalOffset = 0
@@ -69,8 +79,16 @@ def python_add_text(img, layer, text, textType):
 	#size 0
 	#contour linear
 	#noise 0
-	#Layer knocks out drop shadow (checked)
+	#Layer knocks out drop shadow (True)
+	#Merge layers (False) The layerfx lib does not seem to handle layergroups very well, so I will manually merge the layers.
 	pdb.python_layerfx_drop_shadow(img, l, (0, 0, 0), 100, 0, 0, 0, 100, 0, 135, 1, True, False)
+
+	# Merge the shadow layer with the text layer
+	shadowLayerCopy = pdb.gimp_layer_copy(img.layers[0], True)
+	pdb.gimp_image_remove_layer(img, img.layers[0])
+	img.insert_layer(shadowLayerCopy, textLayerGroup, 0)
+	img.merge_down(shadowLayerCopy, 1)
+
 
 
 register(
