@@ -69,10 +69,6 @@ def python_make_map(width, height, squareSize, background):
 	lg = gimp.GroupLayer(img, "Text Group")
 	pdb.gimp_image_insert_layer(img, lg, None, 0)
 
-	l = pdb.gimp_layer_new(img, width, height, 1, "Text", OPAQUE, 0)
-	l.visible = False
-	img.insert_layer(l, lg, 0)
-
 	# pdb.plug_in_grid doesn't actually seem to create gridlines sadly. Maybe I'm just calling it wrong?
 	# pdb.plug_in_grid(img, img.layers[-1], 0, 10, 0, (0x00, 0x00, 0x00, 0xFF), 255, 0, 10, 0, (0xFF, 0x00, 0x00, 0xFF), 255, 0, 0, 0, (0xFF, 0x00, 0x00, 0xFF), 255)
 
