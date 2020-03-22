@@ -98,7 +98,7 @@ register(
         "Andrew McAdams",
         "Andrew McAdams",
         "2020",
-        "<Image>/Filters/Map/Add text",
+        "<Image>/Filters/Map/Add text...",
         "",
         [
             (PF_STRING, "text", "Label text", None),
