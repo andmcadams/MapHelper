@@ -260,6 +260,16 @@ class layerfx_base(object):
     pdb.gimp_message_set_handler(origMsgHandler)
     raise(e(msg))
 
+  def check_sublayers(self, drawable, item):
+    for l in item.layers:
+      try:
+        if drawable in l.layers or self.check_sublayers(drawable, l):
+          return True
+      except AttributeError as e:
+        pass
+
+    return False
+
   def validatedata(self, img, drawable, *params):
     if type(img) != gimp.Image:
       self.show_error_msg("Argument 1 is not an image.", TypeError)
@@ -270,7 +280,7 @@ class layerfx_base(object):
     elif type(drawable) != gimp.Layer:
       self.show_error_msg("Argument 2 is not a layer.", TypeError)
       return False
-    elif drawable not in img.layers:
+    elif not self.check_sublayers(drawable, img):
       self.show_error_msg("Layer is not part of image.", ValueError)
       return False
     else:
