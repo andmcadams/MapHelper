@@ -73,16 +73,18 @@ def python_make_map(width, height, squareSize, background):
 	# pdb.plug_in_grid(img, img.layers[-1], 0, 10, 0, (0x00, 0x00, 0x00, 0xFF), 255, 0, 10, 0, (0xFF, 0x00, 0x00, 0xFF), 255, 0, 0, 0, (0xFF, 0x00, 0x00, 0xFF), 255)
 
 	l = pdb.gimp_layer_new(img, width, height, 1, "Gridlines", TRANSLUCENT, 0)
+	l.visible = False
 	img.add_layer(l, 0)
 	# Draw the gridlines
 	l = img.layers[0]
-	for i in range(10, height, BLOCKSIZE):
-		for j in range(width):
-			pdb.gimp_drawable_set_pixel(l, i, j, 4, [0xFF, 0xFF, 0xFF, 0xFF])
+	region = l.get_pixel_rgn(0, 0, l.width, l.height, True)
 
+	for i in range(10, height, BLOCKSIZE):
+			region[:, i] = '\xFF\xFF\xFF\xFF'*width
 	for i in range(10, width, BLOCKSIZE):
-		for j in range(height):
-			pdb.gimp_drawable_set_pixel(l, j, i, 4, [0xFF, 0xFF, 0xFF, 0xFF])
+			region[i, :] = '\xFF\xFF\xFF\xFF'*height
+	l.visible = True
+
 
 register(
         "python_setup_map",
