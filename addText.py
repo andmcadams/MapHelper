@@ -38,13 +38,9 @@ def python_add_text(img, layer, text, textType):
 			textLayerGroup = l
 			break
 
-	if textLayerGroup == None:
-		#throw some error
-		exit(0)
-
 	l = pdb.gimp_layer_new(img, img.width, img.height, 1, '{} Text Layer'.format(text), 100, 0)
 	l.visible = False
-	img.insert_layer(l, textLayerGroup, 0)
+	pdb.gimp_image_insert_layer(img, l, textLayerGroup, 0)
 
 	region = l.get_pixel_rgn(0, 0, l.width, l.height, True)
 	totalOffset = 0
@@ -86,7 +82,7 @@ def python_add_text(img, layer, text, textType):
 	# Merge the shadow layer with the text layer
 	shadowLayerCopy = pdb.gimp_layer_copy(img.layers[0], True)
 	pdb.gimp_image_remove_layer(img, img.layers[0])
-	img.insert_layer(shadowLayerCopy, textLayerGroup, 0)
+	pdb.gimp_image_insert_layer(img, shadowLayerCopy, textLayerGroup, 0)
 	img.merge_down(shadowLayerCopy, 1)
 
 

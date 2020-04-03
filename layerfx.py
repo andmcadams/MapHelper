@@ -261,6 +261,8 @@ class layerfx_base(object):
     raise(e(msg))
 
   def check_sublayers(self, drawable, item):
+    if drawable in item.layers:
+      return True
     for l in item.layers:
       try:
         if drawable in l.layers or self.check_sublayers(drawable, l):
